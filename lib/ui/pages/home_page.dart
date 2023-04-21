@@ -35,7 +35,13 @@ class _HomePageState extends State<HomePage> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 const SizedBox(height: 15),
-                Text(AppLocalizations.of(context)!.logoutAccount),
+                Text(
+                  AppLocalizations.of(context)!.logoutAccount,
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyMedium!
+                      .copyWith(fontSize: 20),
+                ),
                 const SizedBox(height: 10),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
@@ -54,9 +60,7 @@ class _HomePageState extends State<HomePage> {
                       child: Text(
                         AppLocalizations.of(context)!.cancel,
                       ),
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
+                      onPressed: () => Navigator.pop(context),
                     ),
                   ],
                 )

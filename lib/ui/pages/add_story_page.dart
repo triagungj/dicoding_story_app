@@ -144,7 +144,14 @@ class _AddStoryPageState extends State<AddStoryPage> {
         ),
         child: Padding(
           padding: const EdgeInsets.all(20),
-          child: Text(AppLocalizations.of(context)!.send.toUpperCase()),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(AppLocalizations.of(context)!.send.toUpperCase()),
+              const SizedBox(width: 20),
+              const Icon(Icons.send),
+            ],
+          ),
         ),
       ),
     );
