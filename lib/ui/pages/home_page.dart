@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:story_app/common/assets_path.dart';
+import 'package:story_app/common/common.dart';
+import 'package:story_app/ui/widgets/flag_icon_widget.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({
     required this.onLogout,
     required this.onCardTap,
@@ -16,19 +18,67 @@ class HomePage extends StatelessWidget {
   final void Function(int i) onCardTap;
 
   @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  Future<void> _showLogoutDialog() async {
+    await showDialog<void>(
+      context: context,
+      builder: (
+        context,
+      ) {
+        return Dialog(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const SizedBox(height: 15),
+                Text(AppLocalizations.of(context)!.logoutAccount),
+                const SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                        widget.onLogout();
+                      },
+                      child: Text(
+                        AppLocalizations.of(context)!.yes,
+                        style: Theme.of(context).textTheme.labelMedium,
+                      ),
+                    ),
+                    TextButton(
+                      child: Text(
+                        AppLocalizations.of(context)!.cancel,
+                      ),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                    ),
+                  ],
+                )
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Dicoding Story',
+        title: Text(
+          AppLocalizations.of(context)!.appTitle,
         ),
         actions: [
+          const FlagIconWidget(),
           IconButton(
-            onPressed: onSettingTap,
-            icon: const Icon(Icons.settings),
-          ),
-          IconButton(
-            onPressed: onLogout,
+            onPressed: _showLogoutDialog,
             icon: const Icon(Icons.logout),
           )
         ],
@@ -47,7 +97,7 @@ class HomePage extends StatelessWidget {
               ),
               child: InkWell(
                 onTap: () {
-                  onCardTap(index);
+                  widget.onCardTap(index);
                 },
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -104,7 +154,7 @@ class HomePage extends StatelessWidget {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: onDirectAddStory,
+        onPressed: widget.onDirectAddStory,
         child: const Icon(
           Icons.add,
           size: 32,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:story_app/common/common.dart';
 
 class DetailStoryPage extends StatelessWidget {
   const DetailStoryPage({
@@ -11,7 +12,9 @@ class DetailStoryPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Cerita Bambang Pacul'),
+        title: Text(
+          AppLocalizations.of(context)!.storyOf('Bambang Pacul'),
+        ),
       ),
       body: Column(
         children: [
@@ -47,7 +50,7 @@ class DetailStoryPage extends StatelessWidget {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  'Lorem Ipsum sit dolored ispuwe weqsz sit dolored ispuwe weqsz sit dolored ispuwe weqsz Lorem Ipsum sit dolored ispuwe weqsz',
+                  '''Lorem Ipsum sit dolored ispuwe weqsz sit dolored ispuwe weqsz sit dolored ispuwe weqsz Lorem Ipsum sit dolored ispuwe weqsz''',
                   style: Theme.of(context)
                       .textTheme
                       .bodyMedium!

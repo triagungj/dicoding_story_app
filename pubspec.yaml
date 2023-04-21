@@ -10,10 +10,12 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
   google_fonts: ^4.0.3
   http: ^0.13.5
   image_picker: ^0.8.7+3
-  intl: ^0.18.0
+  intl: ^0.17.0
   provider: ^6.0.5
   rxdart: ^0.27.7
   shared_preferences: ^2.1.0
@@ -25,6 +27,7 @@ dev_dependencies:
   very_good_analysis: ^4.0.0+1
 
 flutter:
+  generate: true
   uses-material-design: true
   assets:
     - assets/logo/

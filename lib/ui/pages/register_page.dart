@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:story_app/common/common.dart';
 
 class RegisterPage extends StatelessWidget {
   const RegisterPage({super.key});
@@ -7,52 +8,58 @@ class RegisterPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Registrasi Akun'),
+        title: Text(
+          AppLocalizations.of(context)!.registrationAccount,
+        ),
       ),
       body: ListView(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         children: [
           const SizedBox(height: 12),
           Text(
-            'Isi data yang diperlukan dibawah ini untuk mendaftarkan akun!',
+            AppLocalizations.of(context)!.fillRegistrationDesc,
             style: Theme.of(context).textTheme.labelMedium,
             textAlign: TextAlign.start,
           ),
           const SizedBox(height: 18),
           TextFormField(
-            decoration: const InputDecoration(
-              label: Text('Nama'),
+            decoration: InputDecoration(
+              label: Text(AppLocalizations.of(context)!.name),
               floatingLabelBehavior: FloatingLabelBehavior.auto,
-              border: OutlineInputBorder(),
+              border: const OutlineInputBorder(),
             ),
             textInputAction: TextInputAction.next,
           ),
           const SizedBox(height: 18),
           TextFormField(
-            decoration: const InputDecoration(
-              label: Text('Email'),
+            decoration: InputDecoration(
+              label: Text(AppLocalizations.of(context)!.email),
               floatingLabelBehavior: FloatingLabelBehavior.auto,
-              border: OutlineInputBorder(),
+              border: const OutlineInputBorder(),
             ),
             keyboardType: TextInputType.emailAddress,
             textInputAction: TextInputAction.next,
           ),
           const SizedBox(height: 18),
           TextFormField(
-            decoration: const InputDecoration(
-              label: Text('Password'),
+            decoration: InputDecoration(
+              label: Text(
+                AppLocalizations.of(context)!.password,
+              ),
               floatingLabelBehavior: FloatingLabelBehavior.auto,
-              border: OutlineInputBorder(),
+              border: const OutlineInputBorder(),
             ),
             obscureText: true,
             textInputAction: TextInputAction.next,
           ),
           const SizedBox(height: 18),
           TextFormField(
-            decoration: const InputDecoration(
-              label: Text('Konfirmasi Password'),
+            decoration: InputDecoration(
+              label: Text(
+                AppLocalizations.of(context)!.confirmPassword,
+              ),
               floatingLabelBehavior: FloatingLabelBehavior.auto,
-              border: OutlineInputBorder(),
+              border: const OutlineInputBorder(),
             ),
             obscureText: true,
           ),
@@ -63,9 +70,11 @@ class RegisterPage extends StatelessWidget {
         style: ElevatedButton.styleFrom(
           shape: const RoundedRectangleBorder(),
         ),
-        child: const Padding(
-          padding: EdgeInsets.all(20),
-          child: Text('DAFTAR'),
+        child: Padding(
+          padding: const EdgeInsets.all(20),
+          child: Text(
+            AppLocalizations.of(context)!.register,
+          ),
         ),
       ),
     );

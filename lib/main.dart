@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:story_app/common/common.dart';
 import 'package:story_app/common/styles.dart';
+import 'package:story_app/data/providers/localization_provider.dart';
 import 'package:story_app/util/router_delegate.dart';
 
 void main() {
@@ -24,20 +27,29 @@ class _AppState extends State<App> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Story App',
-      theme: ThemeData(
-        colorScheme: AppStyle.myColorScheme,
-        textTheme: AppStyle.myTextTheme,
-      ),
-      darkTheme: ThemeData(
-        colorScheme: AppStyle.myColorScheme,
-        textTheme: AppStyle.myTextTheme,
-      ),
-      home: Router(
-        routerDelegate: myRouterDelegate,
-        backButtonDispatcher: RootBackButtonDispatcher(),
-      ),
+    return ChangeNotifierProvider<LocalizationProvider>(
+      create: (context) => LocalizationProvider(),
+      builder: (context, child) {
+        final provider = Provider.of<LocalizationProvider>(context);
+        return MaterialApp(
+          locale: provider.locale,
+          title: 'Story App',
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          theme: ThemeData(
+            colorScheme: AppStyle.myColorScheme,
+            textTheme: AppStyle.myTextTheme,
+          ),
+          darkTheme: ThemeData(
+            colorScheme: AppStyle.myColorScheme,
+            textTheme: AppStyle.myTextTheme,
+          ),
+          home: Router(
+            routerDelegate: myRouterDelegate,
+            backButtonDispatcher: RootBackButtonDispatcher(),
+          ),
+        );
+      },
     );
   }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:story_app/common/assets_path.dart';
+import 'package:story_app/common/common.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({
@@ -58,7 +59,7 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         const SizedBox(height: 20),
                         Text(
-                          'Story App',
+                          AppLocalizations.of(context)!.appTitle,
                           style: Theme.of(context)
                               .textTheme
                               .displayLarge
@@ -104,7 +105,7 @@ class _LoginPageState extends State<LoginPage> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            'Login',
+                            AppLocalizations.of(context)!.login,
                             style: Theme.of(context)
                                 .textTheme
                                 .bodyLarge
@@ -126,7 +127,7 @@ class _LoginPageState extends State<LoginPage> {
                               filled: true,
                               fillColor:
                                   Theme.of(context).colorScheme.onPrimary,
-                              hintText: 'Username',
+                              hintText: AppLocalizations.of(context)!.username,
                               hintStyle:
                                   const TextStyle(color: Color(0xFF7d7d7d)),
                               prefixIcon: const Icon(
@@ -134,6 +135,7 @@ class _LoginPageState extends State<LoginPage> {
                                 color: Color(0xFF000000),
                               ),
                             ),
+                            textInputAction: TextInputAction.next,
                             validator: (value) {
                               if (value!.isEmpty) {
                                 return '* Required';
@@ -156,7 +158,7 @@ class _LoginPageState extends State<LoginPage> {
                               filled: true,
                               fillColor:
                                   Theme.of(context).colorScheme.onPrimary,
-                              hintText: 'Password',
+                              hintText: AppLocalizations.of(context)!.password,
                               hintStyle: const TextStyle(
                                 color: Color(0xFF7d7d7d),
                               ),
@@ -182,9 +184,9 @@ class _LoginPageState extends State<LoginPage> {
                                   widget.onLogin();
                                 }
                               },
-                              child: const Text(
-                                'Login',
-                                style: TextStyle(fontSize: 18),
+                              child: Text(
+                                AppLocalizations.of(context)!.login,
+                                style: const TextStyle(fontSize: 18),
                               ),
                             ),
                           ),
@@ -192,16 +194,16 @@ class _LoginPageState extends State<LoginPage> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              const Text(
-                                'Belum punya akun?',
-                                style: TextStyle(color: Colors.white),
+                              Text(
+                                AppLocalizations.of(context)!.dontHaveAccount,
+                                style: const TextStyle(color: Colors.white),
                               ),
                               const SizedBox(width: 5),
                               InkWell(
                                 onTap: widget.onRegister,
-                                child: const Text(
-                                  'Daftar Sekarang',
-                                  style: TextStyle(
+                                child: Text(
+                                  AppLocalizations.of(context)!.registerNow,
+                                  style: const TextStyle(
                                     decoration: TextDecoration.underline,
                                     color: Colors.white54,
                                   ),

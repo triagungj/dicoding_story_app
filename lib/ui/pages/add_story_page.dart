@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:story_app/common/assets_path.dart';
+import 'package:story_app/common/common.dart';
 
 class AddStoryPage extends StatefulWidget {
   const AddStoryPage({super.key});
@@ -88,7 +89,7 @@ class _AddStoryPageState extends State<AddStoryPage> {
         ),
         children: [
           Text(
-            'Ceritakan pengalaman menarikmu saat belajar di Dicoding! 🤩',
+            '${AppLocalizations.of(context)!.shareYourStoryDesc} 🤩',
             style: Theme.of(context).textTheme.titleLarge,
           ),
           const SizedBox(height: 20),

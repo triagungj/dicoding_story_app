@@ -1,0 +1,31 @@
+{
+  "appTitle": "Dicoding Story",
+  "dontHaveAccount": "Belum punya akun?",
+  "registerNow": "Daftar Sekarang",
+  "name": "Nama",
+  "login": "Login",
+  "username": "Username",
+  "password": "Password",
+  "email": "Email",
+  "confirmPassword": "Konfirmasi Password",
+  "register": "Daftar",
+  "registrationAccount": "Registrasi Akun",
+  "fillRegistrationDesc": "Isi data yng diperlukan dibawah untuk mendaftar akun",
+  "storyOf": "Cerita dari {author}",
+  "@storyOf": {
+    "placeholders": {
+      "author": {
+        "type": "String"
+      }
+    }
+  },
+  "logoutAccount": "Keluar dari akun?",
+  "yes": "Ya",
+  "cancel": "Batal",
+  "shareYourStoryDesc": "Ceritakan pengalamanmu saat belajar di Dicoding",
+  "description": "Deskripsi",
+  "writeYourStory": "Tulis ceritamu",
+  "addStoryPicture": "Tambah Gambar Cerita",
+  "addStory": "Tambah Cerita",
+  "send": "Kirim"
+}
