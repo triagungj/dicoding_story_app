@@ -80,7 +80,7 @@ class _AddStoryPageState extends State<AddStoryPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Tambah Cerita'),
+        title: Text(AppLocalizations.of(context)!.addStory),
       ),
       body: ListView(
         padding: const EdgeInsets.symmetric(
@@ -94,11 +94,11 @@ class _AddStoryPageState extends State<AddStoryPage> {
           ),
           const SizedBox(height: 20),
           TextFormField(
-            decoration: const InputDecoration(
-              label: Text('Deskripsi'),
+            decoration: InputDecoration(
+              label: Text(AppLocalizations.of(context)!.description),
               floatingLabelBehavior: FloatingLabelBehavior.always,
-              hintText: 'Tulis ceritamu...',
-              border: OutlineInputBorder(),
+              hintText: '${AppLocalizations.of(context)!.writeYourStory}...',
+              border: const OutlineInputBorder(),
             ),
             minLines: 1,
             maxLines: 4,
@@ -107,7 +107,7 @@ class _AddStoryPageState extends State<AddStoryPage> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const Text('Tambah Gambar Cerita'),
+              Text(AppLocalizations.of(context)!.addStoryPicture),
               const SizedBox(height: 5),
               InkWell(
                 onTap: _showBottomsheet,
@@ -142,9 +142,9 @@ class _AddStoryPageState extends State<AddStoryPage> {
         style: ElevatedButton.styleFrom(
           shape: const RoundedRectangleBorder(),
         ),
-        child: const Padding(
-          padding: EdgeInsets.all(20),
-          child: Text('KIRIM'),
+        child: Padding(
+          padding: const EdgeInsets.all(20),
+          child: Text(AppLocalizations.of(context)!.send.toUpperCase()),
         ),
       ),
     );
