@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:story_app/common/assets_path.dart';
 import 'package:story_app/common/common.dart';
+import 'package:story_app/common/key_constants.dart';
 import 'package:story_app/data/cubit/auth/login_cubit.dart';
 import 'package:story_app/data/models/login_body.dart';
 import 'package:story_app/ui/widgets/custom_snack_bar.dart';
@@ -14,7 +15,7 @@ class LoginPage extends StatefulWidget {
     super.key,
   });
 
-  final void Function() onLoginSuccess;
+  final void Function(String key) onLoginSuccess;
   final void Function() onRegister;
   final LoginCubit loginCubit;
 
@@ -48,7 +49,7 @@ class _LoginPageState extends State<LoginPage> {
           );
         }
         if (state is LoginSuccess) {
-          widget.onLoginSuccess();
+          widget.onLoginSuccess(state.result.loginResult!.token);
         }
       },
       builder: (context, state) {
@@ -84,9 +85,12 @@ class _LoginPageState extends State<LoginPage> {
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Image.asset(
-                              AssetsPath.logoDicodingDark,
-                              width: 180,
+                            Hero(
+                              tag: KeyConstants.iconAppHeroTag,
+                              child: Image.asset(
+                                AssetsPath.logoDicodingDark,
+                                width: 180,
+                              ),
                             ),
                             const SizedBox(height: 20),
                             Text(

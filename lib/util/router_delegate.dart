@@ -3,17 +3,20 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:story_app/data/api/auth_service.dart';
 import 'package:story_app/data/cubit/auth/login_cubit.dart';
 import 'package:story_app/data/cubit/auth/register_cubit.dart';
+import 'package:story_app/data/cubit/auth/user_token_cubit.dart';
 import 'package:story_app/ui/pages/add_story_page.dart';
 import 'package:story_app/ui/pages/detail_story_page.dart';
 import 'package:story_app/ui/pages/home_page.dart';
 import 'package:story_app/ui/pages/login_page.dart';
 import 'package:story_app/ui/pages/register_page.dart';
+import 'package:story_app/ui/widgets/splash_screen.dart';
 
 class MyRouterDelegate extends RouterDelegate<dynamic>
     with ChangeNotifier, PopNavigatorRouterDelegateMixin<dynamic> {
   MyRouterDelegate() : _navigatorKey = GlobalKey<NavigatorState>();
   final GlobalKey<NavigatorState> _navigatorKey;
 
+  final userTokenCubit = UserTokenCubit();
   final loginCubit = LoginCubit(AuthService());
   final registerCubit = RegisterCubit(AuthService());
 
@@ -35,14 +38,22 @@ class MyRouterDelegate extends RouterDelegate<dynamic>
     notifyListeners();
   }
 
-  void onLoginSuccess() {
+  Future<void> onLoginSuccess(String key) async {
+    await userTokenCubit.setUserToken(key);
+  }
+
+  void onLoggedInChanged() {
     isLoggedIn = true;
     notifyListeners();
   }
 
-  void onLogout() {
+  void onLoggedOutChanged() {
     isLoggedIn = false;
     notifyListeners();
+  }
+
+  void onLogout() {
+    userTokenCubit.removeUserToken();
   }
 
   List<Page<dynamic>> get _loggedOutStack => [
@@ -108,6 +119,10 @@ class MyRouterDelegate extends RouterDelegate<dynamic>
     return MultiBlocProvider(
       providers: [
         BlocProvider(
+          create: (context) => userTokenCubit,
+          child: Container(),
+        ),
+        BlocProvider(
           create: (context) => loginCubit,
           child: Container(),
         ),
@@ -116,23 +131,47 @@ class MyRouterDelegate extends RouterDelegate<dynamic>
           child: Container(),
         ),
       ],
-      child: Navigator(
-        key: navigatorKey,
-        pages: historyStack,
-        onPopPage: (route, result) {
-          final didPop = route.didPop(result);
-          if (!didPop) {
-            return false;
+      child: BlocConsumer<UserTokenCubit, UserTokenState>(
+        listener: (context, state) {
+          if (state is GetUserSuccess) {
+            if (state.token != null) {
+              onLoggedInChanged();
+            } else {
+              onLoggedOutChanged();
+            }
           }
 
-          isRegister = false;
-          selectedStoryId = null;
-          isForm = false;
-          isSetting = false;
+          if (state is RemoveTokenSuccess) {
+            onLoggedOutChanged();
+          }
+          if (state is SaveTokenSuccess) {
+            onLoggedInChanged();
+          }
+        },
+        builder: (context, state) {
+          if (state is UserTokenLoading) {
+            return const SplashScreen();
+          }
 
-          notifyListeners();
+          return Navigator(
+            key: navigatorKey,
+            pages: historyStack,
+            onPopPage: (route, result) {
+              final didPop = route.didPop(result);
+              if (!didPop) {
+                return false;
+              }
 
-          return true;
+              isRegister = false;
+              selectedStoryId = null;
+              isForm = false;
+              isSetting = false;
+
+              notifyListeners();
+
+              return true;
+            },
+          );
         },
       ),
     );

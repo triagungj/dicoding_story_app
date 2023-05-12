@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:story_app/data/api/auth_service.dart';
 import 'package:story_app/data/models/login_body.dart';
+import 'package:story_app/data/models/login_model.dart';
 
 part 'login_state.dart';
 
@@ -15,7 +16,7 @@ class LoginCubit extends Cubit<LoginState> {
     if (response.error) {
       emit(LoginFailure(response.message));
     } else {
-      emit(LoginSuccess(response.message));
+      emit(LoginSuccess(response));
     }
   }
 }
