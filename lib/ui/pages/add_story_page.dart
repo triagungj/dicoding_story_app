@@ -2,18 +2,28 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:story_app/common/assets_path.dart';
 import 'package:story_app/common/common.dart';
+import 'package:story_app/data/cubit/story/add_story_cubit.dart';
+import 'package:story_app/data/models/add_story_body.dart';
+import 'package:story_app/ui/widgets/custom_snack_bar.dart';
 
 class AddStoryPage extends StatefulWidget {
-  const AddStoryPage({super.key});
+  const AddStoryPage({
+    required this.addStoryCubit,
+    super.key,
+  });
+
+  final AddStoryCubit addStoryCubit;
 
   @override
   State<AddStoryPage> createState() => _AddStoryPageState();
 }
 
 class _AddStoryPageState extends State<AddStoryPage> {
+  final descriptionTextController = TextEditingController();
   final imageFile = ValueNotifier<XFile?>(null);
   final imagePath = ValueNotifier<String?>(null);
 
@@ -76,84 +86,131 @@ class _AddStoryPageState extends State<AddStoryPage> {
           );
   }
 
+  Future<void> onUploadStory() async {
+    if (imagePath.value == null || imageFile.value == null) {
+      return showSnackBar(
+        context,
+        CustomSnackBar(
+          context: context,
+          content: const Text(
+            'Harap mengisi semua data yang diperlukan terlebih dulu',
+          ),
+        ),
+      );
+    }
+
+    final imageBytes = await imageFile.value?.readAsBytes();
+    await widget.addStoryCubit.addStory(
+      AddStoryBody(
+        descriptionTextController.text,
+        imageBytes!,
+        imageFile.value!.name,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.addStory),
-      ),
-      body: ListView(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 20,
-          vertical: 15,
-        ),
-        children: [
-          Text(
-            '${AppLocalizations.of(context)!.shareYourStoryDesc} 🤩',
-            style: Theme.of(context).textTheme.titleLarge,
+    return BlocConsumer<AddStoryCubit, AddStoryState>(
+      listener: (context, state) {
+        if (state is AddStoryFailure) {
+          showSnackBar(
+            context,
+            CustomSnackBar(context: context, content: Text(state.message)),
+          );
+        }
+        if (state is AddStorySuccess) {
+          showSnackBar(
+            context,
+            CustomSnackBar(context: context, content: Text(state.message)),
+          );
+        }
+      },
+      builder: (context, state) {
+        return Scaffold(
+          appBar: AppBar(
+            title: Text(AppLocalizations.of(context)!.addStory),
           ),
-          const SizedBox(height: 20),
-          TextFormField(
-            decoration: InputDecoration(
-              label: Text(AppLocalizations.of(context)!.description),
-              floatingLabelBehavior: FloatingLabelBehavior.always,
-              hintText: '${AppLocalizations.of(context)!.writeYourStory}...',
-              border: const OutlineInputBorder(),
+          body: ListView(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 20,
+              vertical: 15,
             ),
-            minLines: 1,
-            maxLines: 4,
-          ),
-          const SizedBox(height: 20),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Text(AppLocalizations.of(context)!.addStoryPicture),
-              const SizedBox(height: 5),
-              InkWell(
-                onTap: _showBottomsheet,
-                child: Container(
-                  padding: const EdgeInsets.all(20),
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Theme.of(context).disabledColor,
-                    ),
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                  child: ValueListenableBuilder<String?>(
-                    valueListenable: imagePath,
-                    builder: (context, value, widget) {
-                      if (value != null) {
-                        return _showImage(value);
-                      }
-                      return Image.asset(
-                        AssetsPath.placeHodler,
-                        height: 200,
-                      );
-                    },
-                  ),
+              Text(
+                '${AppLocalizations.of(context)!.shareYourStoryDesc} 🤩',
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
+              const SizedBox(height: 20),
+              TextFormField(
+                controller: descriptionTextController,
+                decoration: InputDecoration(
+                  label: Text(AppLocalizations.of(context)!.description),
+                  floatingLabelBehavior: FloatingLabelBehavior.always,
+                  hintText:
+                      '${AppLocalizations.of(context)!.writeYourStory}...',
+                  border: const OutlineInputBorder(),
                 ),
+                minLines: 1,
+                maxLines: 4,
+              ),
+              const SizedBox(height: 20),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Text(AppLocalizations.of(context)!.addStoryPicture),
+                  const SizedBox(height: 5),
+                  InkWell(
+                    onTap: _showBottomsheet,
+                    child: Container(
+                      padding: const EdgeInsets.all(20),
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: Theme.of(context).disabledColor,
+                        ),
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      child: ValueListenableBuilder<String?>(
+                        valueListenable: imagePath,
+                        builder: (context, value, widget) {
+                          if (value != null) {
+                            return _showImage(value);
+                          }
+                          return Image.asset(
+                            AssetsPath.placeHodler,
+                            height: 200,
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
-        ],
-      ),
-      bottomNavigationBar: ElevatedButton(
-        onPressed: () {},
-        style: ElevatedButton.styleFrom(
-          shape: const RoundedRectangleBorder(),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(20),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(AppLocalizations.of(context)!.send.toUpperCase()),
-              const SizedBox(width: 20),
-              const Icon(Icons.send),
-            ],
+          bottomNavigationBar: ElevatedButton(
+            onPressed: state is AddStoryLoading ? null : onUploadStory,
+            style: ElevatedButton.styleFrom(
+              shape: const RoundedRectangleBorder(),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: state is AddStoryLoading
+                  ? CircularProgressIndicator(
+                      color: Theme.of(context).colorScheme.primary,
+                    )
+                  : Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(AppLocalizations.of(context)!.send.toUpperCase()),
+                        const SizedBox(width: 20),
+                        const Icon(Icons.send),
+                      ],
+                    ),
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 

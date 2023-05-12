@@ -5,6 +5,7 @@ import 'package:story_app/data/api/story_service.dart';
 import 'package:story_app/data/cubit/auth/login_cubit.dart';
 import 'package:story_app/data/cubit/auth/register_cubit.dart';
 import 'package:story_app/data/cubit/auth/user_token_cubit.dart';
+import 'package:story_app/data/cubit/story/add_story_cubit.dart';
 import 'package:story_app/data/cubit/story/list_story_cubit.dart';
 import 'package:story_app/ui/pages/add_story_page.dart';
 import 'package:story_app/ui/pages/detail_story_page.dart';
@@ -22,6 +23,7 @@ class MyRouterDelegate extends RouterDelegate<dynamic>
   final loginCubit = LoginCubit(AuthService());
   final registerCubit = RegisterCubit(AuthService());
   final listStoryCubit = ListStoryCubit(StoryService());
+  final addStoryCubit = AddStoryCubit(StoryService());
 
   List<Page<dynamic>> historyStack = [];
 
@@ -106,9 +108,11 @@ class MyRouterDelegate extends RouterDelegate<dynamic>
             ),
           ),
         if (isForm)
-          const MaterialPage(
-            key: ValueKey('AddStoryPage'),
-            child: AddStoryPage(),
+          MaterialPage(
+            key: const ValueKey('AddStoryPage'),
+            child: AddStoryPage(
+              addStoryCubit: addStoryCubit,
+            ),
           ),
       ];
 
@@ -122,17 +126,20 @@ class MyRouterDelegate extends RouterDelegate<dynamic>
 
     return MultiBlocProvider(
       providers: [
-        BlocProvider(
+        BlocProvider<UserTokenCubit>(
           create: (context) => userTokenCubit,
         ),
-        BlocProvider(
+        BlocProvider<LoginCubit>(
           create: (context) => loginCubit,
         ),
-        BlocProvider(
+        BlocProvider<RegisterCubit>(
           create: (context) => registerCubit,
         ),
-        BlocProvider(
+        BlocProvider<ListStoryCubit>(
           create: (context) => listStoryCubit,
+        ),
+        BlocProvider<AddStoryCubit>(
+          create: (context) => addStoryCubit,
         ),
       ],
       child: BlocConsumer<UserTokenCubit, UserTokenState>(
