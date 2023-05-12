@@ -10,7 +10,7 @@
   "confirmPassword": "Konfirmasi Password",
   "register": "Daftar",
   "registrationAccount": "Registrasi Akun",
-  "fillRegistrationDesc": "Isi data yng diperlukan dibawah untuk mendaftar akun",
+  "fillRegistrationDesc": "Isi data yang diperlukan dibawah untuk mendaftar akun",
   "storyOf": "Cerita dari {author}",
   "@storyOf": {
     "placeholders": {

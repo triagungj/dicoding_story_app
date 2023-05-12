@@ -47,6 +47,12 @@ class _HomePageState extends State<HomePage> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     TextButton(
+                      child: Text(
+                        AppLocalizations.of(context)!.cancel,
+                      ),
+                      onPressed: () => Navigator.pop(context),
+                    ),
+                    TextButton(
                       onPressed: () {
                         Navigator.pop(context);
                         widget.onLogout();
@@ -55,12 +61,6 @@ class _HomePageState extends State<HomePage> {
                         AppLocalizations.of(context)!.yes,
                         style: Theme.of(context).textTheme.labelMedium,
                       ),
-                    ),
-                    TextButton(
-                      child: Text(
-                        AppLocalizations.of(context)!.cancel,
-                      ),
-                      onPressed: () => Navigator.pop(context),
                     ),
                   ],
                 )
