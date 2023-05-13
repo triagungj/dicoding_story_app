@@ -1,6 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 
-part 'list_story_model.g.dart';
+part 'story_model.g.dart';
 
 @JsonSerializable(createToJson: false)
 class ListStoryModel {
@@ -15,12 +15,30 @@ class ListStoryModel {
 
   final bool error;
   final String message;
-  final List<StoryDetailModel>? listStory;
+  final List<StoryModel>? listStory;
 }
 
 @JsonSerializable(createToJson: false)
-class StoryDetailModel {
-  StoryDetailModel({
+class DetailStoryModel {
+  DetailStoryModel({
+    required this.error,
+    required this.message,
+    this.story,
+  });
+
+  factory DetailStoryModel.fromJson(Map<String, dynamic> json) =>
+      _$DetailStoryModelFromJson(json);
+
+  final bool error;
+  final String message;
+  final StoryModel? story;
+}
+
+
+
+@JsonSerializable(createToJson: false)
+class StoryModel {
+  StoryModel({
     required this.id,
     required this.name,
     required this.description,
@@ -28,8 +46,8 @@ class StoryDetailModel {
     required this.createdAt,
   });
 
-  factory StoryDetailModel.fromJson(Map<String, dynamic> json) =>
-      _$StoryDetailModelFromJson(json);
+  factory StoryModel.fromJson(Map<String, dynamic> json) =>
+      _$StoryModelFromJson(json);
 
   final String id;
   final String name;

@@ -1,6 +1,7 @@
 {
   "appTitle": "Dicoding Story",
   "appSubTitle": "Submission",
+  "storyDetail": "Detail Story",
   "dontHaveAccount": "Belum punya akun?",
   "registerNow": "Daftar Sekarang",
   "name": "Nama",
@@ -23,6 +24,8 @@
   "logoutAccount": "Keluar dari akun?",
   "yes": "Ya",
   "cancel": "Batal",
+  "refresh": "Segarkan",
+  "failedGetData": "Gagal memuat data",
   "shareYourStoryDesc": "Ceritakan pengalamanmu saat belajar di Dicoding",
   "description": "Deskripsi",
   "writeYourStory": "Tulis ceritamu",

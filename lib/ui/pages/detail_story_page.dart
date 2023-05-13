@@ -1,66 +1,133 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:story_app/common/assets_path.dart';
 import 'package:story_app/common/common.dart';
+import 'package:story_app/data/cubit/story/detail_story_cubit.dart';
 
-class DetailStoryPage extends StatelessWidget {
+class DetailStoryPage extends StatefulWidget {
   const DetailStoryPage({
     required this.id,
+    required this.detailStoryCubit,
     super.key,
   });
+
+  final DetailStoryCubit detailStoryCubit;
   final String id;
+
+  @override
+  State<DetailStoryPage> createState() => _DetailStoryPageState();
+}
+
+class _DetailStoryPageState extends State<DetailStoryPage> {
+  Future<void> getData() async {
+    await widget.detailStoryCubit.getDetailStory(widget.id);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getData();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          AppLocalizations.of(context)!.storyOf('Bambang Pacul'),
+          AppLocalizations.of(context)!.storyDetail,
         ),
       ),
-      body: Column(
-        children: [
-          Image.network(
-            'https://dicoding-web-img.sgp1.cdn.digitaloceanspaces.com/original/event/dos:dicoding_developer_coaching_45_back_end_pengantar_ke_amazon_web_services_logo_180322090939.png',
-          ),
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(
-                      flex: 6,
-                      child: Text(
-                        'Bambang Pacul',
-                        style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                              fontSize: 20,
-                              fontWeight: FontWeight.w700,
-                            ),
+      body: BlocBuilder<DetailStoryCubit, DetailStoryState>(
+        builder: (context, state) {
+          return Stack(
+            children: [
+              if (state is DetailStoryLoading)
+                const Center(
+                  child: CircularProgressIndicator(),
+                ),
+              if (state is DetailStoryFailure)
+                Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Text(
+                        AppLocalizations.of(context)!.failedGetData,
+                        style: Theme.of(context).textTheme.bodyLarge,
+                        textAlign: TextAlign.center,
                       ),
+                      const SizedBox(height: 10),
+                      Text(
+                        state.message,
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: 10),
+                      ElevatedButton(
+                        onPressed: getData,
+                        child: Text(AppLocalizations.of(context)!.refresh),
+                      )
+                    ],
+                  ),
+                ),
+              if (state is DetailStorySuccess)
+                Column(
+                  children: [
+                    FadeInImage.assetNetwork(
+                      image: state.result.photoUrl,
+                      placeholder: AssetsPath.placeHodler,
+                      fit: BoxFit.cover,
+                      placeholderFit: BoxFit.cover,
+                      fadeInCurve: Curves.linear,
+                      fadeInDuration: const Duration(milliseconds: 250),
                     ),
-                    Text(
-                      'January 29, 2023',
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodySmall!
-                          .copyWith(fontSize: 15),
-                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Expanded(
+                                flex: 6,
+                                child: Text(
+                                  state.result.name,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .titleLarge!
+                                      .copyWith(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                ),
+                              ),
+                              Text(
+                                state.result.createdAt,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodySmall!
+                                    .copyWith(fontSize: 15),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            state.result.description,
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium!
+                                .copyWith(fontSize: 16),
+                          ),
+                          const SizedBox(height: 8),
+                        ],
+                      ),
+                    )
                   ],
                 ),
-                const SizedBox(height: 4),
-                Text(
-                  '''Lorem Ipsum sit dolored ispuwe weqsz sit dolored ispuwe weqsz sit dolored ispuwe weqsz Lorem Ipsum sit dolored ispuwe weqsz''',
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyMedium!
-                      .copyWith(fontSize: 16),
-                ),
-                const SizedBox(height: 8),
-              ],
-            ),
-          )
-        ],
+            ],
+          );
+        },
       ),
     );
   }

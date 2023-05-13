@@ -7,7 +7,7 @@ import 'package:story_app/common/key_constants.dart';
 import 'package:story_app/data/models/add_story_body.dart';
 import 'package:story_app/data/models/default_model.dart';
 import 'package:story_app/data/models/list_story_body.dart';
-import 'package:story_app/data/models/list_story_model.dart';
+import 'package:story_app/data/models/story_model.dart';
 
 class StoryService {
   Future<ListStoryModel> getListStories(ListStoryBody body) async {
@@ -34,6 +34,35 @@ class StoryService {
       }
     } on SocketException {
       return ListStoryModel(error: true, message: 'No internet connection');
+    } catch (e) {
+      throw Exception('Failed to get data');
+    }
+  }
+
+  Future<DetailStoryModel> getDetailStory(String id) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final token = prefs.getString(KeyConstants.keyUserToken);
+      final response = await http.get(
+        Uri.parse(
+          '${KeyConstants.baseUrl}/stories/$id',
+        ),
+        headers: {
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+      );
+      if (response.statusCode == 200) {
+        return DetailStoryModel.fromJson(
+          json.decode(response.body) as Map<String, dynamic>,
+        );
+      } else {
+        return DetailStoryModel.fromJson(
+          json.decode(response.body) as Map<String, dynamic>,
+        );
+      }
+    } on SocketException {
+      return DetailStoryModel(error: true, message: 'No internet connection');
     } catch (e) {
       throw Exception('Failed to get data');
     }

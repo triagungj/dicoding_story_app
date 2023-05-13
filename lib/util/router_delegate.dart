@@ -6,6 +6,7 @@ import 'package:story_app/data/cubit/auth/login_cubit.dart';
 import 'package:story_app/data/cubit/auth/register_cubit.dart';
 import 'package:story_app/data/cubit/auth/user_token_cubit.dart';
 import 'package:story_app/data/cubit/story/add_story_cubit.dart';
+import 'package:story_app/data/cubit/story/detail_story_cubit.dart';
 import 'package:story_app/data/cubit/story/list_story_cubit.dart';
 import 'package:story_app/ui/pages/add_story_page.dart';
 import 'package:story_app/ui/pages/detail_story_page.dart';
@@ -24,6 +25,7 @@ class MyRouterDelegate extends RouterDelegate<dynamic>
   final registerCubit = RegisterCubit(AuthService());
   final listStoryCubit = ListStoryCubit(StoryService());
   final addStoryCubit = AddStoryCubit(StoryService());
+  final detailStoryCubit = DetailStoryCubit(StoryService());
 
   List<Page<dynamic>> historyStack = [];
 
@@ -90,8 +92,8 @@ class MyRouterDelegate extends RouterDelegate<dynamic>
               isForm = true;
               notifyListeners();
             },
-            onCardTap: (index) {
-              selectedStoryId = '232d';
+            onCardTap: (id) {
+              selectedStoryId = id;
               notifyListeners();
             },
             onSettingTap: () {
@@ -105,6 +107,7 @@ class MyRouterDelegate extends RouterDelegate<dynamic>
             key: ValueKey('DetailStoryPage-$selectedStoryId'),
             child: DetailStoryPage(
               id: selectedStoryId!,
+              detailStoryCubit: detailStoryCubit,
             ),
           ),
         if (isForm)
@@ -140,6 +143,9 @@ class MyRouterDelegate extends RouterDelegate<dynamic>
         ),
         BlocProvider<AddStoryCubit>(
           create: (context) => addStoryCubit,
+        ),
+        BlocProvider<DetailStoryCubit>(
+          create: (context) => detailStoryCubit,
         ),
       ],
       child: BlocConsumer<UserTokenCubit, UserTokenState>(

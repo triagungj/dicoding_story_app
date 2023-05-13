@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:story_app/common/assets_path.dart';
-import 'package:story_app/data/models/list_story_model.dart';
+import 'package:story_app/data/models/story_model.dart';
 
 class StoryCard extends StatelessWidget {
   const StoryCard({
@@ -9,7 +9,7 @@ class StoryCard extends StatelessWidget {
     super.key,
   });
 
-  final StoryDetailModel story;
+  final StoryModel story;
   final void Function()? onTap;
 
   @override

@@ -1,6 +1,7 @@
 {
   "appTitle": "Dicoding Story",
   "appSubTitle": "Submission",
+  "storyDetail": "Story Detail",
   "dontHaveAccount": "Don't have account?",
   "registerNow": "Register Now",
   "name": "Name",
@@ -16,6 +17,8 @@
   "logoutAccount": "Logout from your account?",
   "yes": "Yes",
   "cancel": "Cancel",
+  "refresh": "Refresh",
+  "failedGetData": "Failed to load data",
   "shareYourStoryDesc": "Share your great story while your learn in Dicoding!",
   "description": "Description",
   "writeYourStory": "Write your story",

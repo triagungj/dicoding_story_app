@@ -4,7 +4,7 @@ import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:story_app/common/common.dart';
 import 'package:story_app/data/cubit/story/list_story_cubit.dart';
 import 'package:story_app/data/models/list_story_body.dart';
-import 'package:story_app/data/models/list_story_model.dart';
+import 'package:story_app/data/models/story_model.dart';
 import 'package:story_app/ui/widgets/flag_icon_widget.dart';
 import 'package:story_app/ui/widgets/story_card.dart';
 
@@ -21,8 +21,7 @@ class HomePage extends StatefulWidget {
   final void Function() onLogout;
   final void Function() onDirectAddStory;
   final void Function() onSettingTap;
-  final void Function(int i) onCardTap;
-
+  final void Function(String i) onCardTap;
   @override
   State<HomePage> createState() => _HomePageState();
 }
@@ -32,7 +31,7 @@ class _HomePageState extends State<HomePage> {
 
   int _pageKey = 0;
 
-  final PagingController<int, StoryDetailModel> _pagingController =
+  final PagingController<int, StoryModel> _pagingController =
       PagingController(firstPageKey: 0);
 
   Future<void> _fetchPage(int pageKey) async {
@@ -140,14 +139,14 @@ class _HomePageState extends State<HomePage> {
               )
             ],
           ),
-          body: PagedListView<int, StoryDetailModel>(
+          body: PagedListView<int, StoryModel>(
             pagingController: _pagingController,
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
-            builderDelegate: PagedChildBuilderDelegate<StoryDetailModel>(
+            builderDelegate: PagedChildBuilderDelegate<StoryModel>(
               itemBuilder: (context, item, index) {
                 return StoryCard(
                   story: item,
-                  onTap: () => widget.onCardTap(index),
+                  onTap: () => widget.onCardTap(item.id),
                 );
               },
             ),

@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:story_app/data/api/story_service.dart';
 import 'package:story_app/data/models/list_story_body.dart';
-import 'package:story_app/data/models/list_story_model.dart';
+import 'package:story_app/data/models/story_model.dart';
 
 part 'list_story_state.dart';
 
