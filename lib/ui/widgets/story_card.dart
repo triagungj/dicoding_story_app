@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:story_app/common/assets_path.dart';
 import 'package:story_app/data/models/story_model.dart';
+import 'package:story_app/data/providers/localization_provider.dart';
 
 class StoryCard extends StatelessWidget {
   const StoryCard({
@@ -14,6 +17,12 @@ class StoryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final locale = Provider.of<LocalizationProvider>(context).locale;
+    final storyDateTime = DateTime.parse(story.createdAt);
+    final parsedDate = DateFormat.yMMMMEEEEd(locale.languageCode).format(
+      storyDateTime,
+    );
+
     return Card(
       clipBehavior: Clip.antiAlias,
       margin: const EdgeInsets.symmetric(vertical: 10),
@@ -57,7 +66,7 @@ class StoryCard extends StatelessWidget {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    story.createdAt,
+                    parsedDate,
                     style: Theme.of(context).textTheme.bodySmall,
                     textAlign: TextAlign.start,
                   ),

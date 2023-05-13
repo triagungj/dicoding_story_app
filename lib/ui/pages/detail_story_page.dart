@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:story_app/common/assets_path.dart';
 import 'package:story_app/common/common.dart';
 import 'package:story_app/data/cubit/story/detail_story_cubit.dart';
+import 'package:story_app/data/providers/localization_provider.dart';
 
 class DetailStoryPage extends StatefulWidget {
   const DetailStoryPage({
@@ -71,59 +74,71 @@ class _DetailStoryPageState extends State<DetailStoryPage> {
                   ),
                 ),
               if (state is DetailStorySuccess)
-                Column(
-                  children: [
-                    FadeInImage.assetNetwork(
-                      image: state.result.photoUrl,
-                      placeholder: AssetsPath.placeHodler,
-                      fit: BoxFit.cover,
-                      placeholderFit: BoxFit.cover,
-                      fadeInCurve: Curves.linear,
-                      fadeInDuration: const Duration(milliseconds: 250),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                Builder(
+                  builder: (context) {
+                    final locale =
+                        Provider.of<LocalizationProvider>(context).locale;
+                    final storyDateTime =
+                        DateTime.parse(state.result.createdAt);
+                    final parsedDate =
+                        DateFormat.yMMMMEEEEd(locale.languageCode).format(
+                      storyDateTime,
+                    );
+                    return Column(
+                      children: [
+                        FadeInImage.assetNetwork(
+                          image: state.result.photoUrl,
+                          placeholder: AssetsPath.placeHodler,
+                          fit: BoxFit.cover,
+                          placeholderFit: BoxFit.cover,
+                          fadeInCurve: Curves.linear,
+                          fadeInDuration: const Duration(milliseconds: 250),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(16),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
-                              Expanded(
-                                flex: 6,
-                                child: Text(
-                                  state.result.name,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .titleLarge!
-                                      .copyWith(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.w700,
-                                      ),
-                                ),
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Expanded(
+                                    flex: 6,
+                                    child: Text(
+                                      state.result.name,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleLarge!
+                                          .copyWith(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.w700,
+                                          ),
+                                    ),
+                                  ),
+                                  Text(
+                                    parsedDate,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodySmall!
+                                        .copyWith(fontSize: 15),
+                                  ),
+                                ],
                               ),
+                              const SizedBox(height: 4),
                               Text(
-                                state.result.createdAt,
+                                state.result.description,
                                 style: Theme.of(context)
                                     .textTheme
-                                    .bodySmall!
-                                    .copyWith(fontSize: 15),
+                                    .bodyMedium!
+                                    .copyWith(fontSize: 16),
                               ),
+                              const SizedBox(height: 8),
                             ],
                           ),
-                          const SizedBox(height: 4),
-                          Text(
-                            state.result.description,
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyMedium!
-                                .copyWith(fontSize: 16),
-                          ),
-                          const SizedBox(height: 8),
-                        ],
-                      ),
-                    )
-                  ],
+                        )
+                      ],
+                    );
+                  },
                 ),
             ],
           );
