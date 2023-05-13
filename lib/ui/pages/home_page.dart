@@ -15,6 +15,7 @@ class HomePage extends StatefulWidget {
     required this.onDirectAddStory,
     required this.onSettingTap,
     required this.listStoryCubit,
+    required this.storyPagingController,
     super.key,
   });
   final ListStoryCubit listStoryCubit;
@@ -22,6 +23,7 @@ class HomePage extends StatefulWidget {
   final void Function() onDirectAddStory;
   final void Function() onSettingTap;
   final void Function(String i) onCardTap;
+  final PagingController<int, StoryModel> storyPagingController;
   @override
   State<HomePage> createState() => _HomePageState();
 }
@@ -31,16 +33,13 @@ class _HomePageState extends State<HomePage> {
 
   int _pageKey = 0;
 
-  final PagingController<int, StoryModel> _pagingController =
-      PagingController(firstPageKey: 0);
-
   Future<void> _fetchPage(int pageKey) async {
     try {
       final paginationBody = ListStoryBody(pageKey, _pageSize);
 
       await widget.listStoryCubit.getListStory(paginationBody);
     } catch (error) {
-      _pagingController.error = error;
+      widget.storyPagingController.error = error;
     }
   }
 
@@ -51,44 +50,7 @@ class _HomePageState extends State<HomePage> {
         context,
       ) {
         return Dialog(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const SizedBox(height: 15),
-                Text(
-                  AppLocalizations.of(context)!.logoutAccount,
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyMedium!
-                      .copyWith(fontSize: 20),
-                ),
-                const SizedBox(height: 10),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    TextButton(
-                      child: Text(
-                        AppLocalizations.of(context)!.cancel,
-                      ),
-                      onPressed: () => Navigator.pop(context),
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                        widget.onLogout();
-                      },
-                      child: Text(
-                        AppLocalizations.of(context)!.yes,
-                        style: Theme.of(context).textTheme.labelMedium,
-                      ),
-                    ),
-                  ],
-                )
-              ],
-            ),
-          ),
+          child: logoutDialogContent(context),
         );
       },
     );
@@ -96,7 +58,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    _pagingController.addPageRequestListener(_fetchPage);
+    widget.storyPagingController.addPageRequestListener(_fetchPage);
     super.initState();
   }
 
@@ -105,7 +67,7 @@ class _HomePageState extends State<HomePage> {
     return RefreshIndicator(
       onRefresh: () async {
         _pageKey = 0;
-        _pagingController.refresh();
+        widget.storyPagingController.refresh();
       },
       child: BlocListener<ListStoryCubit, ListStoryState>(
         listener: (context, state) {
@@ -113,17 +75,17 @@ class _HomePageState extends State<HomePage> {
             final newItems = state.result.listStory ?? [];
             final isLastPage = newItems.length < _pageSize;
             if (isLastPage) {
-              _pagingController.appendLastPage(newItems);
+              widget.storyPagingController.appendLastPage(newItems);
             } else {
               final nextPageKey = _pageKey + 1;
-              _pagingController.appendPage(newItems, nextPageKey);
+              widget.storyPagingController.appendPage(newItems, nextPageKey);
             }
 
             _pageKey++;
           }
 
           if (state is ListStoryFailure) {
-            _pagingController.error = state.message;
+            widget.storyPagingController.error = state.message;
           }
         },
         child: Scaffold(
@@ -140,7 +102,7 @@ class _HomePageState extends State<HomePage> {
             ],
           ),
           body: PagedListView<int, StoryModel>(
-            pagingController: _pagingController,
+            pagingController: widget.storyPagingController,
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
             builderDelegate: PagedChildBuilderDelegate<StoryModel>(
               itemBuilder: (context, item, index) {
@@ -151,14 +113,57 @@ class _HomePageState extends State<HomePage> {
               },
             ),
           ),
-          floatingActionButton: FloatingActionButton(
-            onPressed: widget.onDirectAddStory,
-            child: const Icon(
-              Icons.add,
-              size: 32,
-            ),
-          ),
+          floatingActionButton: addStoryButton(),
         ),
+      ),
+    );
+  }
+
+  FloatingActionButton addStoryButton() {
+    return FloatingActionButton(
+          onPressed: widget.onDirectAddStory,
+          child: const Icon(
+            Icons.add,
+            size: 32,
+          ),
+        );
+  }
+
+  Padding logoutDialogContent(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const SizedBox(height: 15),
+          Text(
+            AppLocalizations.of(context)!.logoutAccount,
+            style:
+                Theme.of(context).textTheme.bodyMedium!.copyWith(fontSize: 20),
+          ),
+          const SizedBox(height: 10),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              TextButton(
+                child: Text(
+                  AppLocalizations.of(context)!.cancel,
+                ),
+                onPressed: () => Navigator.pop(context),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                  widget.onLogout();
+                },
+                child: Text(
+                  AppLocalizations.of(context)!.yes,
+                  style: Theme.of(context).textTheme.labelMedium,
+                ),
+              ),
+            ],
+          )
+        ],
       ),
     );
   }

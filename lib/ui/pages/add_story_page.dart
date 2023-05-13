@@ -13,10 +13,12 @@ import 'package:story_app/ui/widgets/custom_snack_bar.dart';
 class AddStoryPage extends StatefulWidget {
   const AddStoryPage({
     required this.addStoryCubit,
+    required this.onAddStorySuccess,
     super.key,
   });
 
   final AddStoryCubit addStoryCubit;
+  final void Function() onAddStorySuccess;
 
   @override
   State<AddStoryPage> createState() => _AddStoryPageState();
@@ -92,8 +94,8 @@ class _AddStoryPageState extends State<AddStoryPage> {
         context,
         CustomSnackBar(
           context: context,
-          content: const Text(
-            'Harap mengisi semua data yang diperlukan terlebih dulu',
+          content: Text(
+            AppLocalizations.of(context)!.emptyFormMessage,
           ),
         ),
       );
@@ -124,6 +126,7 @@ class _AddStoryPageState extends State<AddStoryPage> {
             context,
             CustomSnackBar(context: context, content: Text(state.message)),
           );
+          widget.onAddStorySuccess();
         }
       },
       builder: (context, state) {
@@ -142,75 +145,78 @@ class _AddStoryPageState extends State<AddStoryPage> {
                 style: Theme.of(context).textTheme.titleLarge,
               ),
               const SizedBox(height: 20),
-              TextFormField(
-                controller: descriptionTextController,
-                decoration: InputDecoration(
-                  label: Text(AppLocalizations.of(context)!.description),
-                  floatingLabelBehavior: FloatingLabelBehavior.always,
-                  hintText:
-                      '${AppLocalizations.of(context)!.writeYourStory}...',
-                  border: const OutlineInputBorder(),
-                ),
-                minLines: 1,
-                maxLines: 4,
-              ),
-              const SizedBox(height: 20),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Text(AppLocalizations.of(context)!.addStoryPicture),
-                  const SizedBox(height: 5),
-                  InkWell(
-                    onTap: _showBottomsheet,
-                    child: Container(
-                      padding: const EdgeInsets.all(20),
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: Theme.of(context).disabledColor,
-                        ),
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                      child: ValueListenableBuilder<String?>(
-                        valueListenable: imagePath,
-                        builder: (context, value, widget) {
-                          if (value != null) {
-                            return _showImage(value);
-                          }
-                          return Image.asset(
-                            AssetsPath.placeHodler,
-                            height: 200,
-                          );
-                        },
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+              addStoryForm(context, state),
             ],
-          ),
-          bottomNavigationBar: ElevatedButton(
-            onPressed: state is AddStoryLoading ? null : onUploadStory,
-            style: ElevatedButton.styleFrom(
-              shape: const RoundedRectangleBorder(),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(20),
-              child: state is AddStoryLoading
-                  ? CircularProgressIndicator(
-                      color: Theme.of(context).colorScheme.primary,
-                    )
-                  : Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(AppLocalizations.of(context)!.send.toUpperCase()),
-                        const SizedBox(width: 20),
-                        const Icon(Icons.send),
-                      ],
-                    ),
-            ),
           ),
         );
       },
+    );
+  }
+
+  Column addStoryForm(BuildContext context, AddStoryState state) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Text(AppLocalizations.of(context)!.addStoryPicture),
+        const SizedBox(height: 5),
+        InkWell(
+          onTap: _showBottomsheet,
+          child: Container(
+            padding: const EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: Theme.of(context).disabledColor,
+              ),
+              borderRadius: BorderRadius.circular(5),
+            ),
+            child: ValueListenableBuilder<String?>(
+              valueListenable: imagePath,
+              builder: (context, value, widget) {
+                if (value != null) {
+                  return _showImage(value);
+                }
+                return Image.asset(
+                  AssetsPath.placeHodler,
+                  height: 200,
+                );
+              },
+            ),
+          ),
+        ),
+        const SizedBox(height: 20),
+        TextFormField(
+          controller: descriptionTextController,
+          decoration: InputDecoration(
+            label: Text(AppLocalizations.of(context)!.description),
+            floatingLabelBehavior: FloatingLabelBehavior.always,
+            hintText: '${AppLocalizations.of(context)!.writeYourStory}...',
+            border: const OutlineInputBorder(),
+          ),
+          minLines: 4,
+          maxLines: 8,
+        ),
+        const SizedBox(height: 20),
+        ElevatedButton(
+          onPressed: state is AddStoryLoading ? null : onUploadStory,
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: state is AddStoryLoading
+                ? CircularProgressIndicator(
+                    color: Theme.of(context).colorScheme.primary,
+                  )
+                : Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        AppLocalizations.of(context)!.send.toUpperCase(),
+                      ),
+                      const SizedBox(width: 20),
+                      const Icon(Icons.send),
+                    ],
+                  ),
+          ),
+        ),
+      ],
     );
   }
 
@@ -220,12 +226,12 @@ class _AddStoryPageState extends State<AddStoryPage> {
       children: [
         ListTile(
           leading: const Icon(Icons.photo),
-          title: const Text('Gallery'),
+          title: Text(AppLocalizations.of(context)!.gallery),
           onTap: _onGalleryView,
         ),
         ListTile(
           leading: const Icon(Icons.camera_alt_outlined),
-          title: const Text('Camera'),
+          title: Text(AppLocalizations.of(context)!.camera),
           onTap: _onCameraView,
         ),
       ],

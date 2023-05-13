@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:story_app/data/api/auth_service.dart';
 import 'package:story_app/data/api/story_service.dart';
 import 'package:story_app/data/cubit/auth/login_cubit.dart';
@@ -8,6 +9,7 @@ import 'package:story_app/data/cubit/auth/user_token_cubit.dart';
 import 'package:story_app/data/cubit/story/add_story_cubit.dart';
 import 'package:story_app/data/cubit/story/detail_story_cubit.dart';
 import 'package:story_app/data/cubit/story/list_story_cubit.dart';
+import 'package:story_app/data/models/story_model.dart';
 import 'package:story_app/ui/pages/add_story_page.dart';
 import 'package:story_app/ui/pages/detail_story_page.dart';
 import 'package:story_app/ui/pages/home_page.dart';
@@ -34,6 +36,9 @@ class MyRouterDelegate extends RouterDelegate<dynamic>
   bool isRegister = false;
   bool isForm = false;
   bool isSetting = false;
+
+  final PagingController<int, StoryModel> _pagingController =
+      PagingController(firstPageKey: 0);
 
   void onDirectRegister() {
     isRegister = true;
@@ -63,6 +68,12 @@ class MyRouterDelegate extends RouterDelegate<dynamic>
     userTokenCubit.removeUserToken();
   }
 
+  void onAddStorySuccess() {
+    _pagingController.refresh();
+    isForm = false;
+    notifyListeners();
+  }
+
   List<Page<dynamic>> get _loggedOutStack => [
         MaterialPage(
           key: const ValueKey('LoginPage'),
@@ -88,6 +99,7 @@ class MyRouterDelegate extends RouterDelegate<dynamic>
           child: HomePage(
             onLogout: onLogout,
             listStoryCubit: listStoryCubit,
+            storyPagingController: _pagingController,
             onDirectAddStory: () {
               isForm = true;
               notifyListeners();
@@ -115,6 +127,7 @@ class MyRouterDelegate extends RouterDelegate<dynamic>
             key: const ValueKey('AddStoryPage'),
             child: AddStoryPage(
               addStoryCubit: addStoryCubit,
+              onAddStorySuccess: onAddStorySuccess,
             ),
           ),
       ];

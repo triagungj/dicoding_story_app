@@ -49,100 +49,112 @@ class _DetailStoryPageState extends State<DetailStoryPage> {
                   child: CircularProgressIndicator(),
                 ),
               if (state is DetailStoryFailure)
-                Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Text(
-                        AppLocalizations.of(context)!.failedGetData,
-                        style: Theme.of(context).textTheme.bodyLarge,
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: 10),
-                      Text(
-                        state.message,
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: 10),
-                      ElevatedButton(
-                        onPressed: getData,
-                        child: Text(AppLocalizations.of(context)!.refresh),
-                      )
-                    ],
-                  ),
-                ),
+                detailStoryErrorWidget(context, state),
               if (state is DetailStorySuccess)
                 Builder(
                   builder: (context) {
                     final locale =
                         Provider.of<LocalizationProvider>(context).locale;
                     final storyDateTime =
-                        DateTime.parse(state.result.createdAt);
+                        DateTime.parse(state.result.createdAt).toLocal();
                     final parsedDate =
                         DateFormat.yMMMMEEEEd(locale.languageCode).format(
                       storyDateTime,
                     );
-                    return Column(
-                      children: [
-                        FadeInImage.assetNetwork(
-                          image: state.result.photoUrl,
-                          placeholder: AssetsPath.placeHodler,
-                          fit: BoxFit.cover,
-                          placeholderFit: BoxFit.cover,
-                          fadeInCurve: Curves.linear,
-                          fadeInDuration: const Duration(milliseconds: 250),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(16),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Expanded(
-                                    flex: 6,
-                                    child: Text(
-                                      state.result.name,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .titleLarge!
-                                          .copyWith(
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.w700,
-                                          ),
-                                    ),
-                                  ),
-                                  Text(
-                                    parsedDate,
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodySmall!
-                                        .copyWith(fontSize: 15),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 4),
-                              Text(
-                                state.result.description,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyMedium!
-                                    .copyWith(fontSize: 16),
-                              ),
-                              const SizedBox(height: 8),
-                            ],
-                          ),
-                        )
-                      ],
-                    );
+                    return detailStoryContent(state, context, parsedDate);
                   },
                 ),
             ],
           );
         },
+      ),
+    );
+  }
+
+  Column detailStoryContent(
+    DetailStorySuccess state,
+    BuildContext context,
+    String parsedDate,
+  ) {
+    return Column(
+      children: [
+        FadeInImage.assetNetwork(
+          image: state.result.photoUrl,
+          placeholder: AssetsPath.placeHodler,
+          fit: BoxFit.cover,
+          placeholderFit: BoxFit.cover,
+          fadeInCurve: Curves.linear,
+          fadeInDuration: const Duration(milliseconds: 250),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    flex: 6,
+                    child: Text(
+                      state.result.name,
+                      style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w700,
+                          ),
+                    ),
+                  ),
+                  Text(
+                    parsedDate,
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodySmall!
+                        .copyWith(fontSize: 15),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 4),
+              Text(
+                state.result.description,
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyMedium!
+                    .copyWith(fontSize: 16),
+              ),
+              const SizedBox(height: 8),
+            ],
+          ),
+        )
+      ],
+    );
+  }
+
+  Padding detailStoryErrorWidget(
+    BuildContext context,
+    DetailStoryFailure state,
+  ) {
+    return Padding(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Text(
+            AppLocalizations.of(context)!.failedGetData,
+            style: Theme.of(context).textTheme.bodyLarge,
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 10),
+          Text(
+            state.message,
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 10),
+          ElevatedButton(
+            onPressed: getData,
+            child: Text(AppLocalizations.of(context)!.refresh),
+          )
+        ],
       ),
     );
   }

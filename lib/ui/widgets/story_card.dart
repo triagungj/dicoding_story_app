@@ -18,7 +18,7 @@ class StoryCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final locale = Provider.of<LocalizationProvider>(context).locale;
-    final storyDateTime = DateTime.parse(story.createdAt);
+    final storyDateTime = DateTime.parse(story.createdAt).toLocal();
     final parsedDate = DateFormat.yMMMMEEEEd(locale.languageCode).format(
       storyDateTime,
     );

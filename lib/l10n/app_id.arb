@@ -26,12 +26,15 @@
   "cancel": "Batal",
   "refresh": "Segarkan",
   "failedGetData": "Gagal memuat data",
-  "shareYourStoryDesc": "Ceritakan pengalamanmu saat belajar di Dicoding",
+  "shareYourStoryDesc": "Ceritakan pengalamanmu saat belajar di Dicoding!",
+  "emptyFormMessage": "Harap mengisi semua data formulir yang dibutuhkan",
   "description": "Deskripsi",
   "writeYourStory": "Tulis ceritamu",
   "addStoryPicture": "Tambah Gambar Cerita",
   "addStory": "Tambah Cerita",
   "passwordNotSameMessage": "Password Konfirmasi tidak sama",
   "send": "Kirim",
-  "required": "Wajib diisi"
+  "required": "Wajib diisi",
+  "gallery": "Galeri",
+  "camera": "Kamera"
 }

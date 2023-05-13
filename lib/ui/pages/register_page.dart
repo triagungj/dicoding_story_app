@@ -63,139 +63,7 @@ class _RegisterPageState extends State<RegisterPage> {
       builder: (context, state) {
         return Stack(
           children: [
-            Form(
-              key: formKey,
-              child: Scaffold(
-                appBar: AppBar(
-                  title: Text(
-                    AppLocalizations.of(context)!.registrationAccount,
-                  ),
-                ),
-                body: ListView(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  children: [
-                    const SizedBox(height: 12),
-                    Text(
-                      AppLocalizations.of(context)!.fillRegistrationDesc,
-                      style: Theme.of(context).textTheme.labelMedium,
-                      textAlign: TextAlign.start,
-                    ),
-                    const SizedBox(height: 18),
-                    TextFormField(
-                      controller: nameTextController,
-                      decoration: InputDecoration(
-                        label: Text(AppLocalizations.of(context)!.name),
-                        floatingLabelBehavior: FloatingLabelBehavior.auto,
-                        border: const OutlineInputBorder(),
-                      ),
-                      textInputAction: TextInputAction.next,
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return '* ${AppLocalizations.of(context)?.required}';
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(height: 18),
-                    TextFormField(
-                      controller: emailTextController,
-                      decoration: InputDecoration(
-                        label: Text(AppLocalizations.of(context)!.email),
-                        floatingLabelBehavior: FloatingLabelBehavior.auto,
-                        border: const OutlineInputBorder(),
-                      ),
-                      keyboardType: TextInputType.emailAddress,
-                      textInputAction: TextInputAction.next,
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return '* ${AppLocalizations.of(context)?.required}';
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(height: 18),
-                    TextFormField(
-                      controller: passwordTextController,
-                      decoration: InputDecoration(
-                        label: Text(
-                          AppLocalizations.of(context)!.password,
-                        ),
-                        floatingLabelBehavior: FloatingLabelBehavior.auto,
-                        border: const OutlineInputBorder(),
-                        errorBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Theme.of(context).colorScheme.secondary,
-                          ),
-                        ),
-                        errorStyle: Theme.of(context)
-                            .textTheme
-                            .bodySmall
-                            ?.copyWith(
-                              color: Theme.of(context).colorScheme.secondary,
-                            ),
-                      ),
-                      obscureText: true,
-                      textInputAction: TextInputAction.next,
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return '* ${AppLocalizations.of(context)?.required}';
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(height: 18),
-                    TextFormField(
-                      controller: confirmPasswordTextController,
-                      decoration: InputDecoration(
-                        label: Text(
-                          AppLocalizations.of(context)!.confirmPassword,
-                        ),
-                        floatingLabelBehavior: FloatingLabelBehavior.auto,
-                        border: const OutlineInputBorder(),
-                        errorBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Theme.of(context).colorScheme.secondary,
-                          ),
-                        ),
-                        errorStyle: Theme.of(context)
-                            .textTheme
-                            .bodySmall
-                            ?.copyWith(
-                              color: Theme.of(context).colorScheme.secondary,
-                            ),
-                      ),
-                      obscureText: true,
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return '* ${AppLocalizations.of(context)?.required}';
-                        } else if (value != passwordTextController.text) {
-                          return '''* ${AppLocalizations.of(context)?.passwordNotSameMessage}''';
-                        }
-                        return null;
-                      },
-                    ),
-                  ],
-                ),
-                bottomNavigationBar: ElevatedButton(
-                  onPressed: state is RegisterLoading
-                      ? null
-                      : () {
-                          if (formKey.currentState!.validate()) {
-                            onRegister();
-                          }
-                        },
-                  style: ElevatedButton.styleFrom(
-                    shape: const RoundedRectangleBorder(),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(20),
-                    child: Text(
-                      AppLocalizations.of(context)!.register,
-                    ),
-                  ),
-                ),
-              ),
-            ),
+            registerForm(context, state),
             if (state is RegisterLoading)
               const Center(
                 child: CircularProgressIndicator(),
@@ -203,6 +71,152 @@ class _RegisterPageState extends State<RegisterPage> {
           ],
         );
       },
+    );
+  }
+
+  Form registerForm(BuildContext context, RegisterState state) {
+    return Form(
+      key: formKey,
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(
+            AppLocalizations.of(context)!.registrationAccount,
+          ),
+        ),
+        body: ListView(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          children: [
+            const SizedBox(height: 12),
+            Text(
+              AppLocalizations.of(context)!.fillRegistrationDesc,
+              style: Theme.of(context).textTheme.labelMedium,
+              textAlign: TextAlign.start,
+            ),
+            const SizedBox(height: 18),
+            TextFormField(
+              controller: nameTextController,
+              decoration: InputDecoration(
+                label: Text(AppLocalizations.of(context)!.name),
+                floatingLabelBehavior: FloatingLabelBehavior.auto,
+                border: const OutlineInputBorder(),
+                errorBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: Theme.of(context).colorScheme.secondary,
+                  ),
+                ),
+                errorStyle: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: Theme.of(context).colorScheme.secondary,
+                    ),
+              ),
+              textInputAction: TextInputAction.next,
+              validator: (value) {
+                if (value!.isEmpty) {
+                  return '* ${AppLocalizations.of(context)?.required}';
+                }
+                return null;
+              },
+            ),
+            const SizedBox(height: 18),
+            TextFormField(
+              controller: emailTextController,
+              decoration: InputDecoration(
+                label: Text(AppLocalizations.of(context)!.email),
+                floatingLabelBehavior: FloatingLabelBehavior.auto,
+                border: const OutlineInputBorder(),
+                errorBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: Theme.of(context).colorScheme.secondary,
+                  ),
+                ),
+                errorStyle: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: Theme.of(context).colorScheme.secondary,
+                    ),
+              ),
+              keyboardType: TextInputType.emailAddress,
+              textInputAction: TextInputAction.next,
+              validator: (value) {
+                if (value!.isEmpty) {
+                  return '* ${AppLocalizations.of(context)?.required}';
+                }
+                return null;
+              },
+            ),
+            const SizedBox(height: 18),
+            TextFormField(
+              controller: passwordTextController,
+              decoration: InputDecoration(
+                label: Text(
+                  AppLocalizations.of(context)!.password,
+                ),
+                floatingLabelBehavior: FloatingLabelBehavior.auto,
+                border: const OutlineInputBorder(),
+                errorBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: Theme.of(context).colorScheme.secondary,
+                  ),
+                ),
+                errorStyle: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: Theme.of(context).colorScheme.secondary,
+                    ),
+              ),
+              obscureText: true,
+              textInputAction: TextInputAction.next,
+              validator: (value) {
+                if (value!.isEmpty) {
+                  return '* ${AppLocalizations.of(context)?.required}';
+                }
+                return null;
+              },
+            ),
+            const SizedBox(height: 18),
+            TextFormField(
+              controller: confirmPasswordTextController,
+              decoration: InputDecoration(
+                label: Text(
+                  AppLocalizations.of(context)!.confirmPassword,
+                ),
+                floatingLabelBehavior: FloatingLabelBehavior.auto,
+                border: const OutlineInputBorder(),
+                errorBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: Theme.of(context).colorScheme.secondary,
+                  ),
+                ),
+                errorStyle: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: Theme.of(context).colorScheme.secondary,
+                    ),
+              ),
+              obscureText: true,
+              validator: (value) {
+                if (value!.isEmpty) {
+                  return '* ${AppLocalizations.of(context)?.required}';
+                } else if (value != passwordTextController.text) {
+                  return '''* ${AppLocalizations.of(context)?.passwordNotSameMessage}''';
+                }
+                return null;
+              },
+            ),
+          ],
+        ),
+        bottomNavigationBar: ElevatedButton(
+          onPressed: state is RegisterLoading
+              ? null
+              : () {
+                  if (formKey.currentState!.validate()) {
+                    onRegister();
+                  }
+                },
+          style: ElevatedButton.styleFrom(
+            shape: const RoundedRectangleBorder(),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Text(
+              AppLocalizations.of(context)!.register,
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

@@ -20,11 +20,14 @@
   "refresh": "Refresh",
   "failedGetData": "Failed to load data",
   "shareYourStoryDesc": "Share your great story while your learn in Dicoding!",
+  "emptyFormMessage": "Please fill out all the required data forms",
   "description": "Description",
   "writeYourStory": "Write your story",
   "addStoryPicture": "Add Story Picture",
   "addStory": "Add Story",
   "passwordNotSameMessage": "Confirmation Password Not Same",
   "send": "Send",
-  "required": "Required"
+  "required": "Required",
+  "gallery": "Gallery",
+  "camera": "Camera"
 }
