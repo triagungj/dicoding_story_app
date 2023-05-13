@@ -122,6 +122,10 @@ class _HomePageState extends State<HomePage> {
 
             _pageKey++;
           }
+
+          if (state is ListStoryFailure) {
+            _pagingController.error = state.message;
+          }
         },
         child: Scaffold(
           appBar: AppBar(

@@ -91,7 +91,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       textInputAction: TextInputAction.next,
                       validator: (value) {
                         if (value!.isEmpty) {
-                          return '* Required';
+                          return '* ${AppLocalizations.of(context)?.required}';
                         }
                         return null;
                       },
@@ -108,7 +108,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       textInputAction: TextInputAction.next,
                       validator: (value) {
                         if (value!.isEmpty) {
-                          return '* Required';
+                          return '* ${AppLocalizations.of(context)?.required}';
                         }
                         return null;
                       },
@@ -138,7 +138,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       textInputAction: TextInputAction.next,
                       validator: (value) {
                         if (value!.isEmpty) {
-                          return '* Required';
+                          return '* ${AppLocalizations.of(context)?.required}';
                         }
                         return null;
                       },
@@ -167,9 +167,9 @@ class _RegisterPageState extends State<RegisterPage> {
                       obscureText: true,
                       validator: (value) {
                         if (value!.isEmpty) {
-                          return '* Required';
+                          return '* ${AppLocalizations.of(context)?.required}';
                         } else if (value != passwordTextController.text) {
-                          return '* Konfirmasi Password harus sama';
+                          return '''* ${AppLocalizations.of(context)?.passwordNotSameMessage}''';
                         }
                         return null;
                       },

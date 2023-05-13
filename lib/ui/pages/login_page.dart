@@ -105,7 +105,7 @@ class _LoginPageState extends State<LoginPage> {
                                   ),
                             ),
                             Text(
-                              'Submission',
+                              AppLocalizations.of(context)!.appSubTitle,
                               style: Theme.of(context)
                                   .textTheme
                                   .bodySmall
@@ -177,7 +177,7 @@ class _LoginPageState extends State<LoginPage> {
                                 textInputAction: TextInputAction.next,
                                 validator: (value) {
                                   if (value!.isEmpty) {
-                                    return '* Required';
+                                    return '''* ${AppLocalizations.of(context)?.required}''';
                                   }
                                   return null;
                                 },
@@ -210,7 +210,7 @@ class _LoginPageState extends State<LoginPage> {
                                 ),
                                 validator: (value) {
                                   if (value!.isEmpty) {
-                                    return '* Required';
+                                    return '''* ${AppLocalizations.of(context)?.required}''';
                                   }
                                   return null;
                                 },

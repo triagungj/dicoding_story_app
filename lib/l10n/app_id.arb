@@ -1,5 +1,6 @@
 {
   "appTitle": "Dicoding Story",
+  "appSubTitle": "Submission",
   "dontHaveAccount": "Belum punya akun?",
   "registerNow": "Daftar Sekarang",
   "name": "Nama",
@@ -27,5 +28,7 @@
   "writeYourStory": "Tulis ceritamu",
   "addStoryPicture": "Tambah Gambar Cerita",
   "addStory": "Tambah Cerita",
-  "send": "Kirim"
+  "passwordNotSameMessage": "Password Konfirmasi tidak sama",
+  "send": "Kirim",
+  "required": "Wajib diisi"
 }

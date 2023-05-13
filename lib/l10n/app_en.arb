@@ -1,5 +1,6 @@
 {
   "appTitle": "Dicoding Story",
+  "appSubTitle": "Submission",
   "dontHaveAccount": "Don't have account?",
   "registerNow": "Register Now",
   "name": "Name",
@@ -20,5 +21,7 @@
   "writeYourStory": "Write your story",
   "addStoryPicture": "Add Story Picture",
   "addStory": "Add Story",
-  "send": "Send"
+  "passwordNotSameMessage": "Confirmation Password Not Same",
+  "send": "Send",
+  "required": "Required"
 }
