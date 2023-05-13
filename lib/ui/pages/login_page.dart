@@ -127,14 +127,14 @@ class _LoginPageState extends State<LoginPage> {
                 Text(
                   AppLocalizations.of(context)!.login,
                   style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        fontSize: 32,
+                        fontSize: 20,
                         color: Theme.of(context).colorScheme.onPrimary,
                       ),
                 ),
                 const SizedBox(height: 24),
                 TextFormField(
-                  keyboardType: TextInputType.name,
-                  cursorColor: Theme.of(context).primaryColor,
+                  keyboardType: TextInputType.emailAddress,
+                  cursorColor: Theme.of(context).colorScheme.primary,
                   controller: emailTextController,
                   decoration: InputDecoration(
                     border: OutlineInputBorder(
@@ -165,9 +165,9 @@ class _LoginPageState extends State<LoginPage> {
                   obscureText: true,
                   controller: passwordTextController,
                   style: TextStyle(
-                    color: Theme.of(context).primaryColor,
+                    color: Theme.of(context).colorScheme.primary,
                   ),
-                  cursorColor: Theme.of(context).primaryColor,
+                  cursorColor: Theme.of(context).colorScheme.primary,
                   decoration: InputDecoration(
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8),
@@ -270,14 +270,14 @@ class _LoginPageState extends State<LoginPage> {
               Text(
                 AppLocalizations.of(context)!.appTitle,
                 style: Theme.of(context).textTheme.displayLarge?.copyWith(
-                      fontSize: 50,
+                      fontSize: 36,
                       color: Theme.of(context).colorScheme.onPrimary,
                     ),
               ),
               Text(
                 AppLocalizations.of(context)!.appSubTitle,
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      fontSize: 21,
+                      fontSize: 26,
                       color: Theme.of(context).colorScheme.onPrimary,
                     ),
               ),

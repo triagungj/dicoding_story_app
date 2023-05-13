@@ -71,61 +71,63 @@ class _DetailStoryPageState extends State<DetailStoryPage> {
     );
   }
 
-  Column detailStoryContent(
+  Widget detailStoryContent(
     DetailStorySuccess state,
     BuildContext context,
     String parsedDate,
   ) {
-    return Column(
-      children: [
-        FadeInImage.assetNetwork(
-          image: state.result.photoUrl,
-          placeholder: AssetsPath.placeHodler,
-          fit: BoxFit.cover,
-          placeholderFit: BoxFit.cover,
-          fadeInCurve: Curves.linear,
-          fadeInDuration: const Duration(milliseconds: 250),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(
-                    flex: 6,
-                    child: Text(
-                      state.result.name,
-                      style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                            fontSize: 20,
-                            fontWeight: FontWeight.w700,
-                          ),
-                    ),
-                  ),
-                  Text(
-                    parsedDate,
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodySmall!
-                        .copyWith(fontSize: 15),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 4),
-              Text(
-                state.result.description,
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyMedium!
-                    .copyWith(fontSize: 16),
-              ),
-              const SizedBox(height: 8),
-            ],
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          FadeInImage.assetNetwork(
+            image: state.result.photoUrl,
+            placeholder: AssetsPath.placeHodler,
+            fit: BoxFit.cover,
+            placeholderFit: BoxFit.cover,
+            fadeInCurve: Curves.linear,
+            fadeInDuration: const Duration(milliseconds: 250),
           ),
-        )
-      ],
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      flex: 6,
+                      child: Text(
+                        state.result.name,
+                        style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                              fontSize: 20,
+                              fontWeight: FontWeight.w700,
+                            ),
+                      ),
+                    ),
+                    Text(
+                      parsedDate,
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodySmall!
+                          .copyWith(fontSize: 15),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  state.result.description,
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyMedium!
+                      .copyWith(fontSize: 16),
+                ),
+                const SizedBox(height: 8),
+              ],
+            ),
+          )
+        ],
+      ),
     );
   }
 

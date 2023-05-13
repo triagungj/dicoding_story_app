@@ -1,7 +1,9 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:http/http.dart' as http;
+import 'package:image/image.dart' as img;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:story_app/common/key_constants.dart';
 import 'package:story_app/data/models/add_story_body.dart';
@@ -75,9 +77,11 @@ class StoryService {
 
       final uri = Uri.parse('${KeyConstants.baseUrl}/stories');
 
+      final newBytes = await compressImage(body.imageByte);
+
       final multiPartFile = http.MultipartFile.fromBytes(
         'photo',
-        body.imageByte,
+        newBytes,
         filename: body.fileName,
       );
 
@@ -115,5 +119,29 @@ class StoryService {
     } catch (e) {
       throw Exception('Failed to get data');
     }
+  }
+
+  Future<List<int>> compressImage(List<int> bytes) async {
+    final imageLength = bytes.length;
+    if (imageLength < 1000000) return bytes;
+
+    final image = img.decodeImage(Uint8List.fromList(bytes))!;
+    var compressQuality = 100;
+    var length = imageLength;
+    var newByte = <int>[];
+
+    do {
+      ///
+      compressQuality -= 10;
+
+      newByte = img.encodeJpg(
+        image,
+        quality: compressQuality,
+      );
+
+      length = newByte.length;
+    } while (length > 1000000);
+
+    return newByte;
   }
 }

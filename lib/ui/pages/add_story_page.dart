@@ -89,7 +89,9 @@ class _AddStoryPageState extends State<AddStoryPage> {
   }
 
   Future<void> onUploadStory() async {
-    if (imagePath.value == null || imageFile.value == null) {
+    if (imagePath.value == null ||
+        imageFile.value == null ||
+        descriptionTextController.text.isEmpty) {
       return showSnackBar(
         context,
         CustomSnackBar(

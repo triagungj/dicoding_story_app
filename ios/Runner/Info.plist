@@ -33,7 +33,7 @@
 		<string>Buka privasi ini untuk akses kamera.</string>
 		<key>NSMicrophoneUsageDescription</key>
 		<string>Buka privasi ini untuk akses mikrofon.</string>
-		<key>NSPhotoLibraryUsageDescription </key>
+		<key>NSPhotoLibraryUsageDescription</key>
 		<string>Buka privasi ini untuk akses galeri foto.</string>
 		<array>
 			<string>UIInterfaceOrientationPortrait</string>
