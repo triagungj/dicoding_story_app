@@ -51,9 +51,6 @@ class _AddStoryPageState extends State<AddStoryPage> {
     );
     if (pickedFile != null) {
       setImageFile(pickedFile);
-      if (mounted) {
-        Navigator.pop(context);
-      }
     }
   }
 
@@ -65,9 +62,6 @@ class _AddStoryPageState extends State<AddStoryPage> {
     );
     if (pickedFile != null) {
       setImageFile(pickedFile);
-      if (mounted) {
-        Navigator.pop(context);
-      }
     }
   }
 
@@ -171,17 +165,23 @@ class _AddStoryPageState extends State<AddStoryPage> {
               ),
               borderRadius: BorderRadius.circular(5),
             ),
-            child: ValueListenableBuilder<String?>(
-              valueListenable: imagePath,
-              builder: (context, value, widget) {
-                if (value != null) {
-                  return _showImage(value);
-                }
-                return Image.asset(
-                  AssetsPath.placeHodler,
-                  height: 200,
-                );
-              },
+            child: Column(
+              children: [
+                ValueListenableBuilder<String?>(
+                  valueListenable: imagePath,
+                  builder: (context, value, widget) {
+                    if (value != null) {
+                      return _showImage(value);
+                    }
+                    return Image.asset(
+                      AssetsPath.placeHodler,
+                      height: 200,
+                    );
+                  },
+                ),
+                const SizedBox(height: 10),
+                photoOptionbutton(context),
+              ],
             ),
           ),
         ),
@@ -216,6 +216,35 @@ class _AddStoryPageState extends State<AddStoryPage> {
                       const Icon(Icons.send),
                     ],
                   ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Row photoOptionbutton(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        ElevatedButton(
+          onPressed: _onGalleryView,
+          child: Row(
+            children: [
+              const Icon(Icons.photo),
+              const SizedBox(width: 5),
+              Text(AppLocalizations.of(context)!.gallery),
+            ],
+          ),
+        ),
+        const SizedBox(width: 10),
+        ElevatedButton(
+          onPressed: _onCameraView,
+          child: Row(
+            children: [
+              const Icon(Icons.camera_alt_outlined),
+              const SizedBox(width: 5),
+              Text(AppLocalizations.of(context)!.camera),
+            ],
           ),
         ),
       ],

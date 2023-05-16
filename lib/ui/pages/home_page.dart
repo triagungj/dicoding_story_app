@@ -31,6 +31,8 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   static const _pageSize = 20;
 
+  final logoutDialogShow = ValueNotifier<bool>(false);
+
   int _pageKey = 0;
 
   Future<void> _fetchPage(int pageKey) async {
@@ -44,16 +46,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> _showLogoutDialog() async {
-    await showDialog<void>(
-      context: context,
-      builder: (
-        context,
-      ) {
-        return Dialog(
-          child: logoutDialogContent(context),
-        );
-      },
-    );
+    logoutDialogShow.value = true;
   }
 
   @override
@@ -64,73 +57,100 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return RefreshIndicator(
-      onRefresh: () async {
-        _pageKey = 0;
-        widget.storyPagingController.refresh();
-      },
-      child: BlocListener<ListStoryCubit, ListStoryState>(
-        listener: (context, state) {
-          if (state is ListStorySuccess) {
-            final newItems = state.result.listStory ?? [];
-            final isLastPage = newItems.length < _pageSize;
-            if (isLastPage) {
-              widget.storyPagingController.appendLastPage(newItems);
-            } else {
-              final nextPageKey = _pageKey + 1;
-              widget.storyPagingController.appendPage(newItems, nextPageKey);
-            }
-
-            _pageKey++;
-          }
-
-          if (state is ListStoryFailure) {
-            widget.storyPagingController.error = state.message;
-          }
-        },
-        child: Scaffold(
-          appBar: AppBar(
-            title: Text(
-              AppLocalizations.of(context)!.appTitle,
-            ),
-            actions: [
-              const FlagIconWidget(),
-              IconButton(
-                onPressed: _showLogoutDialog,
-                icon: const Icon(Icons.logout),
-              )
-            ],
-          ),
-          body: PagedListView<int, StoryModel>(
-            pagingController: widget.storyPagingController,
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
-            builderDelegate: PagedChildBuilderDelegate<StoryModel>(
-              itemBuilder: (context, item, index) {
-                return StoryCard(
-                  story: item,
-                  onTap: () => widget.onCardTap(item.id),
-                );
+    return ValueListenableBuilder<bool>(
+      valueListenable: logoutDialogShow,
+      builder: (context, value, _) {
+        return Stack(
+          children: [
+            RefreshIndicator(
+              onRefresh: () async {
+                _pageKey = 0;
+                widget.storyPagingController.refresh();
               },
+              child: BlocListener<ListStoryCubit, ListStoryState>(
+                listener: (context, state) {
+                  if (state is ListStorySuccess) {
+                    final newItems = state.result.listStory ?? [];
+                    final isLastPage = newItems.length < _pageSize;
+                    if (isLastPage) {
+                      widget.storyPagingController.appendLastPage(newItems);
+                    } else {
+                      final nextPageKey = _pageKey + 1;
+                      widget.storyPagingController
+                          .appendPage(newItems, nextPageKey);
+                    }
+
+                    _pageKey++;
+                  }
+
+                  if (state is ListStoryFailure) {
+                    widget.storyPagingController.error = state.message;
+                  }
+                },
+                child: Scaffold(
+                  appBar: AppBar(
+                    title: Text(
+                      AppLocalizations.of(context)!.appTitle,
+                    ),
+                    actions: [
+                      const FlagIconWidget(),
+                      IconButton(
+                        onPressed: _showLogoutDialog,
+                        icon: const Icon(Icons.logout),
+                      )
+                    ],
+                  ),
+                  body: PagedListView<int, StoryModel>(
+                    pagingController: widget.storyPagingController,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 15,
+                    ),
+                    builderDelegate: PagedChildBuilderDelegate<StoryModel>(
+                      itemBuilder: (context, item, index) {
+                        return StoryCard(
+                          story: item,
+                          onTap: () => widget.onCardTap(item.id),
+                        );
+                      },
+                    ),
+                  ),
+                  floatingActionButton: addStoryButton(),
+                ),
+              ),
             ),
-          ),
-          floatingActionButton: addStoryButton(),
-        ),
-      ),
+            if (logoutDialogShow.value)
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                color: Theme.of(context)
+                    .colorScheme
+                    .primaryContainer
+                    .withOpacity(0.5),
+                child: Center(
+                  child: Center(
+                    child: logoutDialogContent(context),
+                  ),
+                ),
+              ),
+          ],
+        );
+      },
     );
   }
 
   FloatingActionButton addStoryButton() {
     return FloatingActionButton(
-          onPressed: widget.onDirectAddStory,
-          child: const Icon(
-            Icons.add,
-            size: 32,
-          ),
-        );
+      onPressed: widget.onDirectAddStory,
+      child: const Icon(
+        Icons.add,
+        size: 32,
+      ),
+    );
   }
 
-  Padding logoutDialogContent(BuildContext context) {
-    return Padding(
+  Widget logoutDialogContent(BuildContext context) {
+    return Container(
+      color: Theme.of(context).colorScheme.outline,
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -149,11 +169,13 @@ class _HomePageState extends State<HomePage> {
                 child: Text(
                   AppLocalizations.of(context)!.cancel,
                 ),
-                onPressed: () => Navigator.pop(context),
+                onPressed: () {
+                  logoutDialogShow.value = false;
+                },
               ),
               TextButton(
                 onPressed: () {
-                  Navigator.pop(context);
+                  logoutDialogShow.value = false;
                   widget.onLogout();
                 },
                 child: Text(
