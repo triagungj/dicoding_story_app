@@ -36,5 +36,7 @@
   "send": "Kirim",
   "required": "Wajib diisi",
   "gallery": "Galeri",
-  "camera": "Kamera"
+  "camera": "Kamera",
+  "locationMap": "Peta Lokasi",
+  "showLocation": "Lihat Peta Lokasi"
 }

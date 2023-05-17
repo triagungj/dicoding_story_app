@@ -29,15 +29,6 @@ class _AddStoryPageState extends State<AddStoryPage> {
   final imageFile = ValueNotifier<XFile?>(null);
   final imagePath = ValueNotifier<String?>(null);
 
-  void _showBottomsheet() {
-    showModalBottomSheet<void>(
-      context: context,
-      builder: (context) {
-        return imagePickBottomsheet();
-      },
-    );
-  }
-
   Future<void> _onCameraView() async {
     final isAndroid = defaultTargetPlatform == TargetPlatform.android;
     final isiOS = defaultTargetPlatform == TargetPlatform.iOS;
@@ -100,9 +91,9 @@ class _AddStoryPageState extends State<AddStoryPage> {
     final imageBytes = await imageFile.value?.readAsBytes();
     await widget.addStoryCubit.addStory(
       AddStoryBody(
-        descriptionTextController.text,
-        imageBytes!,
-        imageFile.value!.name,
+        description: descriptionTextController.text,
+        imageByte: imageBytes!,
+        fileName: imageFile.value!.name,
       ),
     );
   }
@@ -155,34 +146,31 @@ class _AddStoryPageState extends State<AddStoryPage> {
       children: [
         Text(AppLocalizations.of(context)!.addStoryPicture),
         const SizedBox(height: 5),
-        InkWell(
-          onTap: _showBottomsheet,
-          child: Container(
-            padding: const EdgeInsets.all(20),
-            decoration: BoxDecoration(
-              border: Border.all(
-                color: Theme.of(context).disabledColor,
+        Container(
+          padding: const EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: Theme.of(context).disabledColor,
+            ),
+            borderRadius: BorderRadius.circular(5),
+          ),
+          child: Column(
+            children: [
+              ValueListenableBuilder<String?>(
+                valueListenable: imagePath,
+                builder: (context, value, widget) {
+                  if (value != null) {
+                    return _showImage(value);
+                  }
+                  return Image.asset(
+                    AssetsPath.placeHodler,
+                    height: 200,
+                  );
+                },
               ),
-              borderRadius: BorderRadius.circular(5),
-            ),
-            child: Column(
-              children: [
-                ValueListenableBuilder<String?>(
-                  valueListenable: imagePath,
-                  builder: (context, value, widget) {
-                    if (value != null) {
-                      return _showImage(value);
-                    }
-                    return Image.asset(
-                      AssetsPath.placeHodler,
-                      height: 200,
-                    );
-                  },
-                ),
-                const SizedBox(height: 10),
-                photoOptionbutton(context),
-              ],
-            ),
+              const SizedBox(height: 10),
+              photoOptionbutton(context),
+            ],
           ),
         ),
         const SizedBox(height: 20),

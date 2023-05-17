@@ -29,5 +29,7 @@
   "send": "Send",
   "required": "Required",
   "gallery": "Gallery",
-  "camera": "Camera"
+  "camera": "Camera",
+  "locationMap": "Location Map",
+  "showLocation": "Show Location Map"
 }

@@ -11,11 +11,13 @@ class DetailStoryPage extends StatefulWidget {
   const DetailStoryPage({
     required this.id,
     required this.detailStoryCubit,
+    required this.onMapsShow,
     super.key,
   });
 
-  final DetailStoryCubit detailStoryCubit;
   final String id;
+  final DetailStoryCubit detailStoryCubit;
+  final void Function() onMapsShow;
 
   @override
   State<DetailStoryPage> createState() => _DetailStoryPageState();
@@ -97,20 +99,46 @@ class _DetailStoryPageState extends State<DetailStoryPage> {
                   children: [
                     Expanded(
                       flex: 6,
-                      child: Text(
-                        state.result.name,
-                        style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                              fontSize: 20,
-                              fontWeight: FontWeight.w700,
-                            ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Text(
+                            state.result.name,
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleLarge!
+                                .copyWith(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                          ),
+                          Text(
+                            parsedDate,
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodySmall!
+                                .copyWith(fontSize: 15),
+                          ),
+                        ],
                       ),
                     ),
-                    Text(
-                      parsedDate,
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodySmall!
-                          .copyWith(fontSize: 15),
+                    const SizedBox(height: 8),
+                    OutlinedButton(
+                      onPressed: widget.onMapsShow,
+                      style: OutlinedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Icon(Icons.location_pin),
+                          Text(
+                            AppLocalizations.of(context)!.showLocation,
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),
@@ -122,7 +150,6 @@ class _DetailStoryPageState extends State<DetailStoryPage> {
                       .bodyMedium!
                       .copyWith(fontSize: 16),
                 ),
-                const SizedBox(height: 8),
               ],
             ),
           )

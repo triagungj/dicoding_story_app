@@ -18,7 +18,7 @@ class StoryService {
       final token = prefs.getString(KeyConstants.keyUserToken);
       final response = await http.get(
         Uri.parse(
-          '${KeyConstants.baseUrl}/stories?page=${body.page}&size=${body.size}',
+          '${KeyConstants.baseUrl}/stories?page=${body.page}&size=${body.size}&location=1',
         ),
         headers: {
           'Accept': 'application/json',
@@ -90,6 +90,14 @@ class StoryService {
       final fields = <String, String>{
         'description': body.description,
       };
+      if (body.lat != null && body.lon != null) {
+        fields.addAll(
+          <String, String>{
+            'lat': body.lat.toString(),
+            'lon': body.lon.toString(),
+          },
+        );
+      }
       final headers = <String, String>{
         'Accept': 'application/json',
         'Authorization': 'Bearer $token',

@@ -34,8 +34,6 @@ class DetailStoryModel {
   final StoryModel? story;
 }
 
-
-
 @JsonSerializable(createToJson: false)
 class StoryModel {
   StoryModel({
@@ -44,6 +42,8 @@ class StoryModel {
     required this.description,
     required this.photoUrl,
     required this.createdAt,
+    this.lat,
+    this.lon,
   });
 
   factory StoryModel.fromJson(Map<String, dynamic> json) =>
@@ -54,4 +54,6 @@ class StoryModel {
   final String description;
   final String photoUrl;
   final String createdAt;
+  final double? lat;
+  final double? lon;
 }

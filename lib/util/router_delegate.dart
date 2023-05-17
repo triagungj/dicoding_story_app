@@ -14,6 +14,7 @@ import 'package:story_app/ui/pages/add_story_page.dart';
 import 'package:story_app/ui/pages/detail_story_page.dart';
 import 'package:story_app/ui/pages/home_page.dart';
 import 'package:story_app/ui/pages/login_page.dart';
+import 'package:story_app/ui/pages/maps_detail_page.dart';
 import 'package:story_app/ui/pages/register_page.dart';
 import 'package:story_app/ui/widgets/splash_screen.dart';
 
@@ -36,6 +37,7 @@ class MyRouterDelegate extends RouterDelegate<dynamic>
   bool isRegister = false;
   bool isForm = false;
   bool isSetting = false;
+  bool isMaps = false;
 
   final PagingController<int, StoryModel> _pagingController =
       PagingController(firstPageKey: 0);
@@ -120,6 +122,10 @@ class MyRouterDelegate extends RouterDelegate<dynamic>
             child: DetailStoryPage(
               id: selectedStoryId!,
               detailStoryCubit: detailStoryCubit,
+              onMapsShow: () {
+                isMaps = true;
+                notifyListeners();
+              },
             ),
           ),
         if (isForm)
@@ -128,6 +134,14 @@ class MyRouterDelegate extends RouterDelegate<dynamic>
             child: AddStoryPage(
               addStoryCubit: addStoryCubit,
               onAddStorySuccess: onAddStorySuccess,
+            ),
+          ),
+        if (selectedStoryId != null && isMaps)
+          MaterialPage(
+            key: ValueKey('MapsDetailPage-$selectedStoryId'),
+            child: MapsDetailPage(
+              id: selectedStoryId!,
+              detailStoryCubit: detailStoryCubit,
             ),
           ),
       ];
@@ -192,8 +206,13 @@ class MyRouterDelegate extends RouterDelegate<dynamic>
                 return false;
               }
 
+              if (isMaps) {
+                isMaps = false;
+              } else {
+                selectedStoryId = null;
+              }
+
               isRegister = false;
-              selectedStoryId = null;
               isForm = false;
               isSetting = false;
 

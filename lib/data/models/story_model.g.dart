@@ -30,4 +30,6 @@ StoryModel _$StoryModelFromJson(Map<String, dynamic> json) => StoryModel(
       description: json['description'] as String,
       photoUrl: json['photoUrl'] as String,
       createdAt: json['createdAt'] as String,
+      lat: (json['lat'] as num?)?.toDouble(),
+      lon: (json['lon'] as num?)?.toDouble(),
     );
